@@ -65,6 +65,12 @@
         <color rgba="0.5 0.5 0.5 1"/>
       </material>
     </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 ${pi/2}"/>
+      <geometry>
+        <mesh filename="package://arc_robot_description/meshes/cobottable_decimate_origin.dae"/>
+      </geometry> 
+    </collision>
   </link>
 
   <!-- Definition of the lik from mesh -->
@@ -78,6 +84,12 @@
         <color rgba="0.5 0.5 0.5 1"/>
       </material>
     </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 ${pi/2}"/>
+      <geometry>
+        <mesh filename="package://arc_robot_description/meshes/arbeitsplatz_v4.dae" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
   </link>
 
 
