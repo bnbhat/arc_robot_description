@@ -1,15 +1,11 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://wiki.ros.org/xacro" name="$(arg name)">
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="name" default="ur">
    <!-- robot name parameter -->
    <xacro:arg name="name" default="ur"/>
    <!-- import main macro -->
    <xacro:include filename="$(find ur_description)/urdf/ur_macro.xacro"/>
-   
+   <xacro:include filename="$(find robotiq_hande_description)/urdf/robotiq_hande_gripper.urdf.xacro" />
 
-   <!-- Endeffector name -->
-   <!-- <xacro:arg name="endeffector" default="robotiq_hande" /> -->
-   <!-- <xacro:property name="endeffector" value="$(arg endeffector)" /> -->
-    
    <!-- possible 'ur_type' values: ur3, ur3e, ur5, ur5e, ur10, ur10e, ur16e -->
    <!-- the default value should raise an error in case this was called without defining the type -->
    <xacro:arg name="ur_type" default="ur5e"/>
@@ -58,7 +54,48 @@
 
    <!-- create link fixed to the "world" -->
    <link name="world" />
+  <!-- Definition of the lik from mesh -->
+  <link name="cobot_table" type="fixed">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 ${pi/2}"/>
+      <geometry>
+        <mesh filename="package://arc_robot_description/meshes/cobottable_decimate_origin.dae"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+  </link>
 
+  <!-- Definition of the lik from mesh -->
+  <link name="work_table" type="fixed">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 ${pi/2}"/>
+      <geometry>
+        <mesh filename="package://arc_robot_description/meshes/arbeitsplatz_v4.dae" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+  </link>
+
+
+  <!-- Definition of the joint -->
+  <joint name="cobot_table_joint" type="fixed">
+    <parent link="world"/>
+    <child link="cobot_table"/>
+    <origin xyz="0.36 -0.26 -0.945" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Definition of the joint -->
+  <joint name="work_table_joint" type="fixed">
+    <parent link="world"/>
+    <child link="work_table"/>
+    <origin xyz="0.53 1.35 -0.945" rpy="0 0 ${pi}"/>
+  </joint>
+
+  
    <!-- arm -->
    <xacro:ur_robot
      name="$(arg name)"
@@ -96,6 +133,10 @@
      >
      <origin xyz="0 0 0" rpy="0 0 0" />          <!-- position robot in the world -->
    </xacro:ur_robot>
+
+   <xacro:robotiq_hande_gripper prefix="" parent="tool0" >
+       <origin xyz="0.0 0 0.0" rpy="0 0 0"/>
+   </xacro:robotiq_hande_gripper>
 
    <xacro:if value="$(arg sim_gazebo)">
     <!-- Gazebo plugins -->
